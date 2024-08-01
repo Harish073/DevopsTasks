@@ -1,0 +1,62 @@
+- hosts: web
+  become: true
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Install Docker Compose
+      apt:
+        name: docker-compose
+        state: present
+
+    - name: Create application directory
+      file:
+        path: /var/www/app
+        state: directory
+
+    - name: Copy Dockerfile
+      copy:
+        src: Dockerfile
+        dest: /var/www/app/Dockerfile
+
+    - name: Copy package.json
+      copy:
+        src: package.json
+        dest: /var/www/app/package.json
+
+    - name: Copy application code
+      copy:
+        src: app.js
+        dest: /var/www/app/app.js
+
+    - name: Ensure no other container is using port 3000
+      shell: |
+        docker ps -q --filter "publish=3000" | xargs -r docker stop | xargs -r docker rm
+      ignore_errors: yes
+
+    - name: Clean up unused Docker data
+      command: docker system prune -af
+      ignore_errors: yes
+
+    - name: Build and run Docker container
+      command: docker build -t node-app /var/www/app
+      register: build_result
+      ignore_errors: yes
+
+    - name: Run Docker container
+      command: docker run -d -p 3000:3000 node-app
+      when: build_result.rc == 0
+
+    - name: Configure Nginx
+      copy:
+        src: nginx.conf
+        dest: /etc/nginx/sites-available/default
+        mode: '0644'
+
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+
