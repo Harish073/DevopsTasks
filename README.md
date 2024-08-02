@@ -20,4 +20,5 @@ terraform destory --auto-approve
 cd /<ansible_dir
 In inventory.ini file need to change IP address which is created by terraform configuration 
 ansible-playbook -i inventory.ini <playbookname.yml>
+
 http://15.206.166.41:3000/
