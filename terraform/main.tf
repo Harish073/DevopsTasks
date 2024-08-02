@@ -1,6 +1,6 @@
 provider "aws" {
-  access_key = "<access key>"
-  secret_key = "<secret key>"
+ # access_key = "<accesskey>"
+ # secret_key = "<secretkey>"
   region     = "ap-south-1"
 }
 
@@ -48,6 +48,12 @@ resource "aws_security_group" "web" {
   ingress {
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 3000
+    to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

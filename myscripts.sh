@@ -27,7 +27,3 @@ systemctl restart nginx
 # Install Ansible
 apt-get install -y ansible
 
-# Copy Ansible playbook and inventory file
-cp /home/ubuntu/mytasks/ansible/ansible-playbook.yml .
-
-cp /home/ubuntu/mytasks/ansible/nginx.conf .

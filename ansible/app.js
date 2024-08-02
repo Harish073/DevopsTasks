@@ -3,7 +3,7 @@ const app = express();
 const port = 3000;
 
 app.get('/', (req, res) => {
-  res.send('Hi, Task 3, Using Ansible');
+  res.send('For Task 3, the Ansible configuration will expose the application on port 3000');
 });
 
 app.listen(port, () => {
